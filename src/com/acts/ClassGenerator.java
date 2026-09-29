@@ -1,79 +1,64 @@
-package com.acts;
+package dev.tukaram;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class ClassGenerator {
-    
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
+
+    public static void main(String[] args)  {
+
         try {
-            System.out.print("Enter package name: ");
-            String packageName = sc.nextLine();
+			BufferedReader br =
+			        new BufferedReader(new InputStreamReader(System.in));
 
-            System.out.print("Enter class name: ");
-            String className = sc.nextLine();
+			System.out.print("Enter class and file name: ");
+			String className = br.readLine();
 
-            System.out.print("Enter field name: ");
-            String fieldName = sc.nextLine();
+			String fileName = className + ".java";
 
-            System.out.print("Enter field data type (e.g., String, int, float): ");
-            String fieldType = sc.nextLine();
+			File file = new File(fileName);
 
-            String fileName = className + ".java";
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+			if (file.createNewFile()) {
+			    System.out.println("Java file created successfully.");
+			} else {
+			    System.out.println("File already exists.");
+			    return;
+			}
 
-            writer.write("package " + packageName + ";");
-            writer.newLine();
-            writer.newLine();
-            writer.write("public class " + className + " {");
-            writer.newLine();
-            writer.write("    private " + fieldType + " " + fieldName + ";");
-            writer.newLine();
-            writer.newLine();
-            writer.write("    public " + className + "() {");
-            writer.newLine();
-            writer.write("    }");
-            writer.newLine();
-            writer.newLine();
-            writer.write("    public " + className + "(" + fieldType + " " + fieldName + ") {");
-            writer.newLine();
-            writer.write("        this." + fieldName + " = " + fieldName + ";");
-            writer.newLine();
-            writer.write("    }");
-            writer.newLine();
-            writer.newLine();
-            writer.write("    public " + fieldType + " get" + capitalize(fieldName) + "() {");
-            writer.newLine();
-            writer.write("        return " + fieldName + ";");
-            writer.newLine();
-            writer.write("    }");
-            writer.newLine();
-            writer.newLine();
-            writer.write("    public void set" + capitalize(fieldName) + "(" + fieldType + " " + fieldName + ") {");
-            writer.newLine();
-            writer.write("        this." + fieldName + " = " + fieldName + ";");
-            writer.newLine();
-            writer.write("    }");
-            writer.newLine();
-            writer.write("}");
+			System.out.print("Enter package name: ");
+			String pack = br.readLine();
 
-            writer.close();
-            sc.close();
-            System.out.println("Class file '" + fileName + "' generated successfully!");
+			System.out.print("Enter constructor access specifier (public/private/protected): ");
+			String accessSpecifier = br.readLine();
 
-        } catch (IOException e) {
-            System.out.println("Error generating class: " + e.getMessage());
-        }
-    }
+			BufferedWriter writer =
+			        new BufferedWriter(new FileWriter(file));
 
-    private static String capitalize(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+			writer.write("package " + pack + ";");
+			writer.newLine();
+			writer.newLine();
+
+			writer.write("public class " + className + " {");
+			writer.newLine();
+			writer.newLine();
+
+			writer.write("\t" + accessSpecifier + " " + className + "() {");
+			writer.newLine();
+			writer.write("\t}");
+			writer.newLine();
+
+			writer.write("}");
+
+			writer.close();
+
+			System.out.println("Java class generated successfully.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
